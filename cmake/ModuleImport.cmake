@@ -74,32 +74,27 @@ macro(BinImport ModulePath DependsLib)
 
 endmacro(BinImport)
 
-macro(LibImport ModuleName DependsLib)
-    MESSAGE(STATUS "LibImport ${ModulePath} ${DependsLib}")
+macro(LibImport ModuleName ModulePath)
+    MESSAGE(STATUS "LibImport ${ModuleName} ${ModulePath}")
 
     IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
-        SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
-        FOREACH(subdir ${SUBDIRS})
-            FILE(GLOB_RECURSE LIB_SOURCES
-            ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+        FILE(GLOB_RECURSE LIB_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
 
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
-            )
+        ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
+        )
 
-            IF (WIN32)
-                LIST(APPEND LIB_SOURCES)
-            ENDIF(WIN32)
+        IF (WIN32)
+            LIST(APPEND LIB_SOURCES)
+        ENDIF(WIN32)
 
-            ADD_LIBRARY(${ModuleName} ${LIB_SOURCES})
-            TARGET_LINK_LIBRARIES(${subdir} ${DependsLib})
-        ENDFOREACH()
+        ADD_LIBRARY(${ModuleName} ${LIB_SOURCES})
     ENDIF()
-
 endmacro(LibImport)
 
 macro(ModuleInclude2 ModuleName ModulePath)
