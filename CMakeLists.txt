@@ -19,7 +19,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/dmcpp_config.h.in ${CMAKE_CUR
 
 ModuleImport("dmlog" "thirdparty/dmlog")
 LibImport("dmcpp" "src")
-BinImport("test" "dmcpp;dmlog")
+ExeImport("test" "dmcpp;dmlog")
 
 #ADD_CUSTOM_COMMAND(
 #TARGET dmcpptest

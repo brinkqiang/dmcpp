@@ -55,7 +55,7 @@ macro(ModuleImport ModuleName ModulePath)
     ModuleInclude(${ModuleName} ${ModulePath})
 endmacro(ModuleImport)
 
-macro(BinImport ModulePath DependsLib)
+macro(ExeImport ModulePath DependsLib)
     MESSAGE(STATUS "BinImport ${ModulePath} ${DependsLib}")
 
     IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
@@ -72,7 +72,7 @@ macro(BinImport ModulePath DependsLib)
         ENDFOREACH()
     ENDIF()
 
-endmacro(BinImport)
+endmacro(ExeImport)
 
 macro(LibImport ModuleName ModulePath)
     MESSAGE(STATUS "LibImport ${ModuleName} ${ModulePath}")
