@@ -1,5 +1,5 @@
 
-MACRO(SUBDIRLIST result curdir)
+macro(SUBDIRLIST result curdir)
     FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
     SET(dirlist "")
     FOREACH(child ${children})
@@ -8,7 +8,7 @@ MACRO(SUBDIRLIST result curdir)
         ENDIF()
     ENDFOREACH()
     SET(${result} ${dirlist})
-ENDMACRO()
+endmacro()
 
 macro(ModuleInclude ModuleName ModulePath)
     MESSAGE(STATUS "ModuleInclude ${ModuleName} ${ModulePath}")
@@ -61,18 +61,46 @@ macro(BinImport ModulePath DependsLib)
     IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
         FOREACH(subdir ${SUBDIRS})
-            FILE(GLOB_RECURSE SOURCES
+            FILE(GLOB_RECURSE BIN_SOURCES
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cc
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.c
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.hpp
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.h)
-            ADD_EXECUTABLE(${subdir} ${SOURCES})
-            TARGET_LINK_LIBRARIES(${subdir})
+            ADD_EXECUTABLE(${subdir} ${BIN_SOURCES})
+            TARGET_LINK_LIBRARIES(${subdir} ${DependsLib})
         ENDFOREACH()
     ENDIF()
 
 endmacro(BinImport)
+
+macro(LibImport ModuleName DependsLib)
+    MESSAGE(STATUS "LibImport ${ModulePath} ${DependsLib}")
+
+    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+        SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+        FOREACH(subdir ${SUBDIRS})
+            FILE(GLOB_RECURSE LIB_SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
+            )
+
+            IF (WIN32)
+                LIST(APPEND LIB_SOURCES)
+            ENDIF(WIN32)
+
+            ADD_LIBRARY(${ModuleName} ${LIB_SOURCES})
+            TARGET_LINK_LIBRARIES(${subdir} ${DependsLib})
+        ENDFOREACH()
+    ENDIF()
+
+endmacro(LibImport)
 
 macro(ModuleInclude2 ModuleName ModulePath)
     MESSAGE(STATUS "ModuleInclude2 ${ModuleName} ${ModulePath}")
