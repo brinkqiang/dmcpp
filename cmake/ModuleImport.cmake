@@ -3,9 +3,9 @@ MACRO(SUBDIRLIST result curdir)
     FILE(GLOB children RELATIVE ${curdir} ${curdir}/*)
     SET(dirlist "")
     FOREACH(child ${children})
-    IF(IS_DIRECTORY ${curdir}/${child})
-        LIST(APPEND dirlist ${child})
-    ENDIF()
+        IF(IS_DIRECTORY ${curdir}/${child})
+            LIST(APPEND dirlist ${child})
+        ENDIF()
     ENDFOREACH()
     SET(${result} ${dirlist})
 ENDMACRO()
@@ -54,6 +54,25 @@ macro(ModuleImport ModuleName ModulePath)
 
     ModuleInclude(${ModuleName} ${ModulePath})
 endmacro(ModuleImport)
+
+macro(BinImport ModulePath DependsLib)
+    MESSAGE(STATUS "BinImport ${ModulePath} ${DependsLib}")
+
+    IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+        SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
+        FOREACH(subdir ${SUBDIRS})
+            FILE(GLOB_RECURSE SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.cc
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/${subdir}/*.h)
+            ADD_EXECUTABLE(${subdir} ${SOURCES})
+            TARGET_LINK_LIBRARIES(${subdir})
+        ENDFOREACH()
+    ENDIF()
+
+endmacro(BinImport)
 
 macro(ModuleInclude2 ModuleName ModulePath)
     MESSAGE(STATUS "ModuleInclude2 ${ModuleName} ${ModulePath}")
