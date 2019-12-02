@@ -49,17 +49,17 @@ int main()
 {
     HttpServer server;
 
-    server.set_http_handler("OnConnect", [](std::string& req, std::string& res) {
+    server.set_http_handler("OnConnect", [](std::string&& req, std::string&& res) {
         LOG_DEBUG("{} -> {}", req, res);
     }
     );
 
-    server.set_http_handler("OnDisConnect", [](std::string& req, std::string& res) {
+    server.set_http_handler("OnDisConnect", [](std::string&& req, std::string&& res) {
         LOG_DEBUG("{} -> {}", req, res);
     }
     );
 
-    server.set_http_handler("OnMsg", [](std::string& req, std::string& res) {
+    server.set_http_handler("OnMsg", [](std::string&& req, std::string&& res) {
         LOG_DEBUG("{} -> {}", req, res);
     }
     );
