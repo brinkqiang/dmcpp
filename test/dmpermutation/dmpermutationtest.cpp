@@ -2,7 +2,6 @@
 #include <iostream>     // std::cout
 #include <algorithm>    // std::next_permutation, std::sort
 #include <vector>
-#include <xutility>
 #include <iostream>
 #include "dmformat.h"
 #include "dmstrtk.hpp"
