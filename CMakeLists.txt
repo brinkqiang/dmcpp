@@ -19,21 +19,4 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/dmcpp_config.h.in ${CMAKE_CUR
 
 ModuleImport("dmlog" "thirdparty/dmlog")
 LibImport("dmcpp" "src")
-ExeImport("test" "dmcpp;dmlog")
-
-#ADD_CUSTOM_COMMAND(
-#TARGET dmcpptest
-#PRE_BUILD
-#COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#${CMAKE_CURRENT_SOURCE_DIR}/config/test.csv
-#$<TARGET_FILE_DIR:dmcpptest>
-#)
-
-#INSTALL(DIRECTORY include/ DESTINATION include)
-#INSTALL(TARGETS dmcpp
-#        RUNTIME DESTINATION bin
-#        LIBRARY DESTINATION lib
-#        ARCHIVE DESTINATION lib)
-
-#SET(DMCPP_LIBS "dmcpp")
-#MARK_AS_ADVANCED(${DMCPP_LIBS})
+ExeImport("test" "dmcpp")
