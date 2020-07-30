@@ -1,18 +1,24 @@
 // next_permutation example
 #include <iostream>     // std::cout
 #include <algorithm>    // std::next_permutation, std::sort
+#include <vector>
+#include <xutility>
+#include <iostream>
+#include "dmformat.h"
+#include "dmstrtk.hpp"
 
-int main () {
-  int myints[] = {1,2,3};
+typedef std::vector<int> VecData;
 
-  std::sort (myints,myints+3);
+int main ()
+{
+    VecData vec{1, 2,3};
 
-  std::cout << "The 3! possible permutations with 3 elements:\n";
-  do {
-    std::cout << myints[0] << ' ' << myints[1] << ' ' << myints[2] << '\n';
-  } while ( std::next_permutation(myints,myints+3) );
+    do
+    {
+        fmt::print("{}\n", strtk::join(",", vec));
+    }
+    while (std::next_permutation(vec.begin(), vec.end()));
 
-  std::cout << "After loop: " << myints[0] << ' ' << myints[1] << ' ' << myints[2] << '\n';
-
-  return 0;
+    fmt::print("{}\n", strtk::join(",", vec));
+    return 0;
 }
