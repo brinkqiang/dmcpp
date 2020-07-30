@@ -1,5 +1,5 @@
 // next_permutation example
-#include <iostream>     // std::cout
+
 #include <algorithm>    // std::next_permutation, std::sort
 #include <vector>
 #include <iostream>
