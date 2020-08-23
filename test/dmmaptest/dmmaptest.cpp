@@ -12,7 +12,7 @@ int main()
 
         auto it = mapData.find(1);
 
-        for (int i = 10; i < 1000; i++)
+        for (int i = 10; i < 100000; i++)
         {
             mapData.insert(std::make_pair(i, i));
         }
@@ -24,7 +24,7 @@ int main()
 
         auto it = mapData.find(1);
 
-        for (int i = 10; i < 1000; i++)
+        for (int i = 10; i < 100000; i++)
         {
             mapData.insert(std::make_pair(i, i));
         }
