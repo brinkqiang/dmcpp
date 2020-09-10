@@ -6,9 +6,9 @@
 #include <queue>
 #include <atomic>
 #include <future>
-//#include <condition_variable>
-//#include <thread>
-//#include <functional>
+#include <condition_variable>
+#include <thread>
+#include <functional>
 #include <stdexcept>
 #include <thread>
 
