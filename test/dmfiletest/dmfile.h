@@ -78,15 +78,22 @@ static bool DMWriteFile(const char* fname, const std::string& strData)
         return false;
     }
 
+    size_t size = strData.size();
     size_t write = 0;
 
     do
     {
-        write += fwrite((void*)&strData.front(), strData.size(), 1, fptr.get());
+        write += fwrite((void*)(&strData.front() + write), 1, size - write,
+                        fptr.get());
     }
-    while(write >= strData.size());
+    while(write < size);
 
     return true;
+}
+
+static bool DMWriteFile(const std::string& strName, const std::string& strData)
+{
+    return DMWriteFile(strName.c_str(), strData);
 }
 
 #endif // __DMFILE_H_INCLUDE__
