@@ -29,7 +29,7 @@
 
 struct FileDescriptorDeleter
 {
-    inline void operator()(FILE *f) const
+    inline void operator()(FILE* f) const
     {
         if (f)
         {
@@ -38,13 +38,15 @@ struct FileDescriptorDeleter
     }
 };
 
-static std::string DMLoadFile(const char *fname)
+static std::string DMLoadFile(const char* fname)
 {
     std::unique_ptr<FILE, FileDescriptorDeleter> fptr{ fopen(fname, "rb") };
+
     if (!fptr)
     {
         return std::string();
     }
+
     fseek(fptr.get(), 0, SEEK_END);
     auto size = ftell(fptr.get());
     fseek(fptr.get(), 0, SEEK_SET);
@@ -52,11 +54,12 @@ static std::string DMLoadFile(const char *fname)
     output.resize(size);
 
     size_t read = 0;
+
     do
     {
-        read += fread((void*)&output.front() + read, 1, size - read, fptr.get());
+        read += fread((void*)(&output.front() + read), 1, size - read, fptr.get());
     }
-    while(read >= size);
+    while(read < size);
 
     return std::move(output);
 }
@@ -66,15 +69,17 @@ static std::string DMLoadFile(const std::string& strName)
     return DMLoadFile(strName.c_str());
 }
 
-static bool DMWriteFile(const char *fname, const std::string& strData)
+static bool DMWriteFile(const char* fname, const std::string& strData)
 {
     std::unique_ptr<FILE, FileDescriptorDeleter> fptr{ fopen(fname, "wb") };
+
     if (!fptr)
     {
         return false;
     }
 
     size_t write = 0;
+
     do
     {
         write += fwrite((void*)&strData.front(), strData.size(), 1, fptr.get());
