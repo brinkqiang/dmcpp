@@ -95,7 +95,7 @@ public:
         Release();
     }
 
-    inline void AddSingleton(IDMSafeSingleton* pSink)
+    void AddSingleton(IDMSafeSingleton* pSink)
     {
         if (std::count(m_vecList.begin(), m_vecList.end(), pSink))
         {
@@ -157,7 +157,10 @@ class CDMSingleton : public IDMSafeSingleton
 public:
     typedef T  SingletonObj;
 
-    CDMSingleton();
+    CDMSingleton()
+    {
+        CDMSingletonFrame::Instance()->AddSingleton(this);
+    }
     virtual ~CDMSingleton() {}
 public:
     class  TSafeCreator
@@ -174,6 +177,7 @@ public:
 public:
     static bool Create()
     {
+        s_oCreator.Do();
         std::call_once(m_oOnce, [&]()
         {
             m_poInstance = new SingletonObj();
@@ -183,21 +187,14 @@ public:
 
     static void Destroy()
     {
+        s_oCreator.Do();
         delete m_poInstance;
         m_poInstance = NULL;
     }
 
     static T* Instance()
     {
-        if (m_poInstance)
-        {
-            return m_poInstance;
-        }
-
-        std::call_once(m_oOnce, [&]()
-        {
-            m_poInstance = new SingletonObj();
-        });
+        s_oCreator.Do();
         return m_poInstance;
     }
 
@@ -218,12 +215,6 @@ private:
     static std::once_flag m_oOnce;
     static SingletonObj* m_poInstance;
 };
-
-template<typename T>
-CDMSingleton<T>::CDMSingleton()
-{
-    CDMSingletonFrame::Instance()->AddSingleton(this);
-}
 
 template <typename T>
 std::once_flag CDMSingleton<T>::m_oOnce;
