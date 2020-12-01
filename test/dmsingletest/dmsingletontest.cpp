@@ -1,27 +1,7 @@
 
 #include "dmsingleton.h"
-
-class CPlayer : public CDMSingleton<CPlayer>
-{
-    friend class CDMSingleton<CPlayer>;
-public:
-    CPlayer() {}
-    virtual ~CPlayer() {}
-
-    virtual bool Init()
-    {
-        return true;
-    }
-    virtual bool UnInit()
-    {
-        return true;
-    }
-
-    virtual void Release()
-    {
-        Destroy();
-    }
-};
+#include "player.h"
+#include "monster.h"
 
 int main()
 {
