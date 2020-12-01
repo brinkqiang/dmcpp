@@ -95,7 +95,7 @@ public:
         Release();
     }
 
-    void AddSingleton(IDMSafeSingleton* pSink)
+    inline void AddSingleton(IDMSafeSingleton* pSink)
     {
         if (std::count(m_vecList.begin(), m_vecList.end(), pSink))
         {
@@ -115,7 +115,7 @@ public:
     void Init()
     {
         for (VecSafeSafeSingletonIt It = m_vecList.begin(); It != m_vecList.end();
-            ++It)
+                ++It)
         {
             if (!(*It)->Init())
             {
@@ -127,7 +127,7 @@ public:
     void UnInit()
     {
         for (VecSafeSafeSingletonRIt It = m_vecList.rbegin(); It != m_vecList.rend();
-            ++It)
+                ++It)
         {
             if (!(*It)->UnInit())
             {
@@ -139,7 +139,7 @@ public:
     void Release()
     {
         for (VecSafeSafeSingletonRIt It = m_vecList.rbegin(); It != m_vecList.rend();
-            ++It)
+                ++It)
         {
             (*It)->Release();
         }
@@ -157,10 +157,7 @@ class CDMSingleton : public IDMSafeSingleton
 public:
     typedef T  SingletonObj;
 
-    CDMSingleton()
-    {
-        CDMSingletonFrame::Instance()->AddSingleton(this);
-    }
+    CDMSingleton();
     virtual ~CDMSingleton() {}
 public:
     class  TSafeCreator
@@ -178,9 +175,9 @@ public:
     static bool Create()
     {
         std::call_once(m_oOnce, [&]()
-            {
-                m_poInstance = new SingletonObj();
-            });
+        {
+            m_poInstance = new SingletonObj();
+        });
         return NULL != m_poInstance;
     }
 
@@ -198,9 +195,9 @@ public:
         }
 
         std::call_once(m_oOnce, [&]()
-            {
-                m_poInstance = new SingletonObj();
-            });
+        {
+            m_poInstance = new SingletonObj();
+        });
         return m_poInstance;
     }
 
@@ -221,6 +218,12 @@ private:
     static std::once_flag m_oOnce;
     static SingletonObj* m_poInstance;
 };
+
+template<typename T>
+CDMSingleton<T>::CDMSingleton()
+{
+    CDMSingletonFrame::Instance()->AddSingleton(this);
+}
 
 template <typename T>
 std::once_flag CDMSingleton<T>::m_oOnce;
