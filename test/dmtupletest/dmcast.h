@@ -23,6 +23,7 @@
 #define __DMCAST_H_INCLUDE__
 
 #include <string>
+#include <tuple>
 
 namespace dmcast
 {
@@ -146,6 +147,15 @@ inline long double lexical_cast(const std::string& strIn)
 {
     return std::stold(strIn);
 }
+
+template<typename... T>
+std::string lexical_cast(std::tuple<T...>& t)
+{
+	std::string strData;
+	std::apply([&](auto&& ... args) { ((strData += (strData.empty() ? "" : ","), strData += lexical_cast(args)), ...); }, t);
+	return strData;
+}
+
 
 }
 #endif // __DMCAST_H_INCLUDE__
