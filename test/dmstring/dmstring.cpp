@@ -4,9 +4,10 @@
 #include <string>
 #include <vector>
 #include <type_traits>
+#include "dmstrtk.hpp"
 
 template<typename... Args>
-inline void append(std::string& s, Args&&... args)
+inline void append(std::string& s, Args&& ... args)
 {
     ((s += std::forward<Args>(args), s += ", "), ...);
 }
@@ -18,7 +19,8 @@ inline void append(std::string& s, Args&&... args)
 
 //c++17 unary fold
 template<typename... Args>
-void print(Args... args) {
+void print(Args... args)
+{
     ((std::cout << args << std::endl), ...);
 }
 //
@@ -27,9 +29,14 @@ void print(Args... args) {
 //    (std::cout << ... << args) << '\n';
 //}
 
-int main() {
-    std::string s;    
+int main()
+{
+    std::string s;
     append(s, "1", "2", "3");
     print("1", "2", "3");
+
+    std::string strData = R"(C:\dfajf\name)";
+    std::vector<std::string> vecData;
+    strtk::parse(strData, "\\", vecData);
     return 0;
 }
