@@ -23,45 +23,14 @@
 #define __DMCAST_H_INCLUDE__
 
 #include <string>
-#include <tuple>
 
 namespace dmcast
 {
-
-template <size_t N>
-inline std::string lexical_cast(const char(&strIn)[N])
-{
-	return strIn;
-}
 
 template <typename T>
 inline T lexical_cast(const std::string& strIn)
 {
     return std::stoi(strIn);
-}
-
-template <typename T>
-inline T lexical_cast(const char* strIn)
-{
-    return std::stoi(strIn);
-}
-
-template <typename T>
-inline std::string lexical_cast(T&& value)
-{
-    return std::to_string(value);
-}
-
-template <>
-inline std::string lexical_cast(const char*& strIn)
-{
-    return strIn;
-}
-
-template <>
-inline std::string lexical_cast(const char* strIn)
-{
-	return strIn;
 }
 
 template <>
@@ -71,7 +40,7 @@ inline std::string lexical_cast(const std::string& strIn)
 }
 
 template <>
-inline bool lexical_cast(const char* strIn)
+inline bool lexical_cast(const std::string& strIn)
 {
     return std::stoi(strIn);
 }
@@ -148,14 +117,29 @@ inline long double lexical_cast(const std::string& strIn)
     return std::stold(strIn);
 }
 
-template<typename... T>
-std::string lexical_cast(std::tuple<T...>& t)
+template <typename T>
+inline T lexical_cast(const char* strIn)
 {
-	std::string strData;
-	std::apply([&](auto&& ... args) { ((strData += (strData.empty() ? "" : ","), strData += lexical_cast(args)), ...); }, t);
-	return strData;
+    return std::stoi(strIn);
 }
 
+template <>
+inline std::string lexical_cast(const char* strIn)
+{
+    return strIn;
+}
+
+template <typename T>
+inline std::string lexical_cast(const T& value)
+{
+    return std::to_string(value);
+}
+
+template <size_t N>
+inline std::string lexical_cast(const char(&strIn)[N])
+{
+    return strIn;
+}
 
 }
 #endif // __DMCAST_H_INCLUDE__
