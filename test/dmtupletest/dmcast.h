@@ -141,6 +141,12 @@ inline std::string lexical_cast(const char(&strIn)[N])
     return strIn;
 }
 
+std::string lexical_cast(std::tuple<T...>& t)
+{
+	std::string strData;
+	std::apply([&](auto&& ... args) { ((strData += (strData.empty() ? "" : ","), strData += lexical_cast(args)), ...); }, t);
+	return strData;
+}
 }
 #endif // __DMCAST_H_INCLUDE__
 
