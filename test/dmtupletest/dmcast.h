@@ -141,6 +141,7 @@ inline std::string lexical_cast(const char(&strIn)[N])
     return strIn;
 }
 
+template <>
 std::string lexical_cast(std::tuple<T...>& t)
 {
 	std::string strData;
