@@ -130,6 +130,14 @@ inline std::string lexical_cast(const char* strIn)
 }
 
 template <typename T>
+std::string lexical_cast(std::tuple<T...>& t)
+{
+	std::string strData;
+	std::apply([&](auto&& ... args) { ((strData += (strData.empty() ? "" : ","), strData += lexical_cast(args)), ...); }, t);
+	return strData;
+}
+
+template <typename T>
 inline std::string lexical_cast(const T& value)
 {
     return std::to_string(value);
@@ -141,13 +149,6 @@ inline std::string lexical_cast(const char(&strIn)[N])
     return strIn;
 }
 
-template <>
-std::string lexical_cast(std::tuple<T...>& t)
-{
-	std::string strData;
-	std::apply([&](auto&& ... args) { ((strData += (strData.empty() ? "" : ","), strData += lexical_cast(args)), ...); }, t);
-	return strData;
-}
 }
 #endif // __DMCAST_H_INCLUDE__
 
