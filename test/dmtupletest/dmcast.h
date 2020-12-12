@@ -27,118 +27,210 @@
 namespace dmcast
 {
 
-template <typename T>
-inline T lexical_cast(const std::string& strIn)
+template <typename To, typename From>
+struct Converter
 {
-    return std::stoi(strIn);
-}
+};
+
+//to numeric
+
+template <typename From>
+struct Converter<int8_t, From>
+{
+    static int8_t convert(const From& from)
+    {
+        return std::stoi(from);
+    }
+};
+
+template <typename From>
+struct Converter<uint8_t, From>
+{
+    static uint8_t convert(const From& from)
+    {
+        return std::stoul(from);
+    }
+};
+
+template <typename From>
+struct Converter<int16_t, From>
+{
+    static int16_t convert(const From& from)
+    {
+        return std::stoi(from);
+    }
+};
+
+template <typename From>
+struct Converter<uint16_t, From>
+{
+    static uint16_t convert(const From& from)
+    {
+        return std::stoul(from);
+    }
+};
+
+template <typename From>
+struct Converter<int32_t, From>
+{
+    static int32_t convert(const From& from)
+    {
+        return std::stoi(from);
+    }
+};
+
+template <typename From>
+struct Converter<uint32_t, From>
+{
+    static uint32_t convert(const From& from)
+    {
+        return std::stoul(from);
+    }
+};
+
+template <typename From>
+struct Converter<int64_t, From>
+{
+    static int64_t convert(const From& from)
+    {
+        return std::stoll(from);
+    }
+};
+
+template <typename From>
+struct Converter<uint64_t, From>
+{
+    static uint64_t convert(const From& from)
+    {
+        return std::stoull(from);
+    }
+};
+
+template <typename From>
+struct Converter<float, From>
+{
+    static float convert(const From& from)
+    {
+        return (float)std::atof(from);
+    }
+};
+
+template <typename From>
+struct Converter<double, From>
+{
+    static double convert(const From& from)
+    {
+        return std::atof(from);
+    }
+};
+
+template <typename From>
+struct Converter<bool, From>
+{
+    static typename std::enable_if<std::is_integral<From>::value, bool>::type
+    convert(From from)
+    {
+        return !!from;
+    }
+};
 
 template <>
-inline std::string lexical_cast(const std::string& strIn)
+struct Converter<bool, std::string>
 {
-    return strIn;
-}
+    static bool convert(const std::string& from)
+    {
+        return !!std::stoi(from);
+    }
+};
 
 template <>
-inline bool lexical_cast(const std::string& strIn)
+struct Converter<bool, const char*>
 {
-    return std::stoi(strIn);
-}
+    static bool convert(const char* from)
+    {
+        return !!std::stoi(from);
+    }
+};
 
 template <>
-inline char lexical_cast(const std::string& strIn)
+struct Converter<bool, char*>
 {
-    return std::stoi(strIn);
-}
+    static bool convert(char* from)
+    {
+        return !!std::stoi(from);
+    }
+};
+
+template <unsigned N>
+struct Converter<bool, const char[N]>
+{
+    static bool convert(const char(&from)[N])
+    {
+        return !!std::stoi(from);
+    }
+};
+
+template <unsigned N>
+struct Converter<bool, char[N]>
+{
+    static bool convert(const char(&from)[N])
+    {
+        return !!std::stoi(from);
+    }
+};
+
+//to string
+template <typename From>
+struct Converter<std::string, From>
+{
+    static std::string convert(const From& from)
+    {
+        return std::to_string(from);
+    }
+};
 
 template <>
-inline int8_t lexical_cast(const std::string& strIn)
+struct Converter<std::string, bool>
 {
-    return std::stoi(strIn);
-}
+    static std::string convert(const bool& from)
+    {
+        return std::to_string((int)from);
+    }
+};
 
 template <>
-inline uint8_t lexical_cast(const std::string& strIn)
+struct Converter<std::string, const char*>
 {
-    return std::stoul(strIn);
+    static std::string convert(const char* from)
+    {
+        return from;
+    }
+};
+
+template <typename To, typename From>
+typename std::enable_if<!std::is_same<To, From>::value,
+         To>::type lexical_cast(const From& from)
+{
+    return Converter<To, From>::convert(from);
 }
 
-template <>
-inline int16_t lexical_cast(const std::string& strIn)
+template <typename To, typename From>
+typename std::enable_if<std::is_same<To, From>::value, To>::type lexical_cast(
+    const From& from)
 {
-    return std::stoi(strIn);
+    return from;
 }
 
-template <>
-inline uint16_t lexical_cast(const std::string& strIn)
+template <typename ... T>
+std::string lexical_cast(std::tuple<T...>& t)
 {
-    return std::stoul(strIn);
-}
-
-template <>
-inline int32_t lexical_cast(const std::string& strIn)
-{
-    return std::stoi(strIn);
-}
-
-template <>
-inline uint32_t lexical_cast(const std::string& strIn)
-{
-    return std::stoul(strIn);
-}
-
-template <>
-inline int64_t lexical_cast(const std::string& strIn)
-{
-    return std::stoll(strIn);
-}
-
-template <>
-inline uint64_t lexical_cast(const std::string& strIn)
-{
-    return std::stoull(strIn);
-}
-
-template <>
-inline float lexical_cast(const std::string& strIn)
-{
-    return std::stof(strIn);
-}
-
-template <>
-inline double lexical_cast(const std::string& strIn)
-{
-    return std::stod(strIn);
-}
-
-template <>
-inline long double lexical_cast(const std::string& strIn)
-{
-    return std::stold(strIn);
-}
-
-template <typename T>
-inline T lexical_cast(const char* strIn)
-{
-    return std::stoi(strIn);
-}
-
-template <>
-inline std::string lexical_cast(const char* strIn)
-{
-    return strIn;
-}
-
-template <typename T>
-inline std::string lexical_cast(const T& value)
-{
-    return std::to_string(value);
-}
-
-template <size_t N>
-inline std::string lexical_cast(const char(&strIn)[N])
-{
-    return strIn;
+    std::string strData;
+    std::apply([&](auto&& ... args)
+    {
+        ((strData += (strData.empty() ? "" : ","),
+          strData += dmcast::lexical_cast<std::string>(args)), ...);
+    }, t);
+    return strData;
 }
 
 }
