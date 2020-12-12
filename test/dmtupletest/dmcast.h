@@ -32,8 +32,6 @@ struct Converter
 {
 };
 
-//to numeric
-
 template <typename From>
 struct Converter<int8_t, From>
 {
