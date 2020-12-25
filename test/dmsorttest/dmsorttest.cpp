@@ -45,7 +45,7 @@ int main()
     std::sort(vecPlayer.begin(), vecPlayer.end(), [](player* p1, player* p2)
     {
         return (p1->get_level() < p2->get_level()) ||
-               (p1->get_level() == p2->get_level() && p1->get_age() < p2->get_age());
+               (p1->get_level() == p2->get_level() && p1->get_age() > p2->get_age());
     });
 
     std::sort(vecPlayer.begin(), vecPlayer.end(), [](player* p1, player* p2)
