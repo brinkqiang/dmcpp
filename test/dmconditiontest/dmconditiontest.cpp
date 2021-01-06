@@ -4,8 +4,9 @@
 #include <iostream>
 #include <queue>
 #include <chrono>
+#include "gtest.h"
 
-int main()
+TEST(dmconditiontest, dmconditiontest)
 {
     // 生产者数量
     std::queue<int> produced_nums;
@@ -52,5 +53,4 @@ int main()
 
     producer.join();
     consumer.join();
-    return 0;
 }

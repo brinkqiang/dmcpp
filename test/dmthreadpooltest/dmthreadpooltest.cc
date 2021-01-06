@@ -1,5 +1,6 @@
 #include "dmthreadpool.h"
 #include "dmlog.h"
+#include "gtest.h"
 
 void fun1(int slp)
 {
@@ -31,7 +32,7 @@ public:
 	}
 };
 
-int main()
+TEST(dmthreadpooltest, dmthreadpooltest)
 {
 	try {
 		std::threadpool executor{ 50 };
@@ -83,10 +84,8 @@ int main()
 		for (auto && result : results)
 			std::cout << result.get() << ' ';
 		std::cout << std::endl;
-		return 0;
 	}
     catch (std::exception& e) {
 	    std::cout << "some unhappy happened...  " << std::this_thread::get_id() << e.what() << std::endl;
     }
-    return 0;
 }

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <type_traits>
-
+#include "gtest.h"
 template<typename... Args>
 inline void append(std::string& s, Args&&... args)
 {
@@ -27,9 +27,9 @@ void print(Args... args) {
 //    (std::cout << ... << args) << '\n';
 //}
 
-int main() {
+TEST(dmstring, dmstring)
+{
     std::string s;    
     append(s, "1", "2", "3");
     print("1", "2", "3");
-    return 0;
 }

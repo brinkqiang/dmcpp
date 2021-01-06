@@ -5,7 +5,7 @@
 #include "dmconsole.h"
 #include "dmtypes.h"
 #include "dmlock.h"
-
+#include "gtest.h"
 #include <mutex>
 
 #define MAX_THREADS 16
@@ -110,8 +110,8 @@ private:
     volatile bool   m_bStop;
 };
 
-int main(int argc, char* argv[]) {
+TEST(dmthreadtest, dmthreadtest)
+{
     CMain::Instance()->Start(CMain::Instance());
     CMain::Instance()->WaitFor();
-    return 0;
 }
