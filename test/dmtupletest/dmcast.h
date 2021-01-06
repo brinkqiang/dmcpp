@@ -23,139 +23,213 @@
 #define __DMCAST_H_INCLUDE__
 
 #include <string>
-#include <tuple>
 
 namespace dmcast
 {
 
-template <size_t N>
-inline std::string lexical_cast(const char(&strIn)[N])
+template <typename To, typename From>
+struct Converter
 {
-	return strIn;
-}
+};
 
-template <typename T>
-inline T lexical_cast(const std::string& strIn)
+template <typename From>
+struct Converter<int8_t, From>
 {
-    return std::stoi(strIn);
-}
+    static int8_t convert(const From& from)
+    {
+        return std::stoi(from);
+    }
+};
 
-template <typename T>
-inline T lexical_cast(const char* strIn)
+template <typename From>
+struct Converter<uint8_t, From>
 {
-    return std::stoi(strIn);
-}
+    static uint8_t convert(const From& from)
+    {
+        return std::stoul(from);
+    }
+};
 
-template <typename T>
-inline std::string lexical_cast(T&& value)
+template <typename From>
+struct Converter<int16_t, From>
 {
-    return std::to_string(value);
-}
+    static int16_t convert(const From& from)
+    {
+        return std::stoi(from);
+    }
+};
 
-template <>
-inline std::string lexical_cast(const char*& strIn)
+template <typename From>
+struct Converter<uint16_t, From>
 {
-    return strIn;
-}
+    static uint16_t convert(const From& from)
+    {
+        return std::stoul(from);
+    }
+};
 
-template <>
-inline std::string lexical_cast(const char* strIn)
+template <typename From>
+struct Converter<int32_t, From>
 {
-	return strIn;
-}
+    static int32_t convert(const From& from)
+    {
+        return std::stoi(from);
+    }
+};
 
-template <>
-inline std::string lexical_cast(const std::string& strIn)
+template <typename From>
+struct Converter<uint32_t, From>
 {
-    return strIn;
-}
+    static uint32_t convert(const From& from)
+    {
+        return std::stoul(from);
+    }
+};
 
-template <>
-inline bool lexical_cast(const char* strIn)
+template <typename From>
+struct Converter<int64_t, From>
 {
-    return std::stoi(strIn);
-}
+    static int64_t convert(const From& from)
+    {
+        return std::stoll(from);
+    }
+};
 
-template <>
-inline char lexical_cast(const std::string& strIn)
+template <typename From>
+struct Converter<uint64_t, From>
 {
-    return std::stoi(strIn);
-}
+    static uint64_t convert(const From& from)
+    {
+        return std::stoull(from);
+    }
+};
 
-template <>
-inline int8_t lexical_cast(const std::string& strIn)
+template <typename From>
+struct Converter<float, From>
 {
-    return std::stoi(strIn);
-}
+    static float convert(const From& from)
+    {
+        return (float)std::atof(from);
+    }
+};
 
-template <>
-inline uint8_t lexical_cast(const std::string& strIn)
+template <typename From>
+struct Converter<double, From>
 {
-    return std::stoul(strIn);
-}
+    static double convert(const From& from)
+    {
+        return std::atof(from);
+    }
+};
 
-template <>
-inline int16_t lexical_cast(const std::string& strIn)
+template <typename From>
+struct Converter<bool, From>
 {
-    return std::stoi(strIn);
-}
-
-template <>
-inline uint16_t lexical_cast(const std::string& strIn)
-{
-    return std::stoul(strIn);
-}
-
-template <>
-inline int32_t lexical_cast(const std::string& strIn)
-{
-    return std::stoi(strIn);
-}
-
-template <>
-inline uint32_t lexical_cast(const std::string& strIn)
-{
-    return std::stoul(strIn);
-}
-
-template <>
-inline int64_t lexical_cast(const std::string& strIn)
-{
-    return std::stoll(strIn);
-}
-
-template <>
-inline uint64_t lexical_cast(const std::string& strIn)
-{
-    return std::stoull(strIn);
-}
-
-template <>
-inline float lexical_cast(const std::string& strIn)
-{
-    return std::stof(strIn);
-}
+    static typename std::enable_if<std::is_integral<From>::value, bool>::type
+    convert(From from)
+    {
+        return !!from;
+    }
+};
 
 template <>
-inline double lexical_cast(const std::string& strIn)
+struct Converter<bool, std::string>
 {
-    return std::stod(strIn);
-}
+    static bool convert(const std::string& from)
+    {
+        return !!std::stoi(from);
+    }
+};
 
 template <>
-inline long double lexical_cast(const std::string& strIn)
+struct Converter<bool, const char*>
 {
-    return std::stold(strIn);
+    static bool convert(const char* from)
+    {
+        return !!std::stoi(from);
+    }
+};
+
+template <>
+struct Converter<bool, char*>
+{
+    static bool convert(char* from)
+    {
+        return !!std::stoi(from);
+    }
+};
+
+template <unsigned N>
+struct Converter<bool, const char[N]>
+{
+    static bool convert(const char(&from)[N])
+    {
+        return !!std::stoi(from);
+    }
+};
+
+template <unsigned N>
+struct Converter<bool, char[N]>
+{
+    static bool convert(const char(&from)[N])
+    {
+        return !!std::stoi(from);
+    }
+};
+
+//to string
+template <typename From>
+struct Converter<std::string, From>
+{
+    static std::string convert(const From& from)
+    {
+        return std::to_string(from);
+    }
+};
+
+template <>
+struct Converter<std::string, bool>
+{
+    static std::string convert(const bool& from)
+    {
+        return std::to_string((int)from);
+    }
+};
+
+template <>
+struct Converter<std::string, const char*>
+{
+    static std::string convert(const char* from)
+    {
+        return from;
+    }
+};
+
+template <typename To, typename From>
+typename std::enable_if<!std::is_same<To, From>::value,
+         To>::type lexical_cast(const From& from)
+{
+    return Converter<To, From>::convert(from);
 }
 
-template<typename... T>
+template <typename To, typename From>
+typename std::enable_if<std::is_same<To, From>::value, To>::type lexical_cast(
+    const From& from)
+{
+    return from;
+}
+
+template <typename ... T>
 std::string lexical_cast(std::tuple<T...>& t)
 {
-	std::string strData;
-	std::apply([&](auto&& ... args) { ((strData += (strData.empty() ? "" : ","), strData += lexical_cast(args)), ...); }, t);
-	return strData;
+    std::string strData;
+    std::apply([&](auto&& ... args)
+    {
+        ((strData += (strData.empty() ? "" : ","),
+          strData += dmcast::lexical_cast<std::string>(args)), ...);
+    }, t);
+    return strData;
 }
-
 
 }
 #endif // __DMCAST_H_INCLUDE__
