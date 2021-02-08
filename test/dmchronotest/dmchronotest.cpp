@@ -15,5 +15,4 @@ TEST(dmchronotest, dmchronotest)
 
         ASSERT_TRUE(mapChrono[nano] == 1);
     }
-    
 }
