@@ -4,10 +4,10 @@
 #include <string>
 #include "dmcast.h"
 #include "dmformat.h"
+#include "gtest.h"
 
-int main()
+TEST(dmtupletest, dmtupletest)
 {
-    auto t = std::make_tuple(1, 2, "abc", "def", 4.0f);
-    fmt::printf(dmcast::lexical_cast(t));
-    return 0;
+	auto t = std::make_tuple(1, 2, "abc", "def", 4.0f);
+	fmt::print(dmcast::lexical_cast(t));
 }

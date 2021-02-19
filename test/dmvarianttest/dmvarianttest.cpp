@@ -4,11 +4,13 @@
 #include <type_traits>
 #include <variant>
 #include <vector>
+#include "gtest.h"
 
 template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
-int main() {
+TEST(dmvarianttest, dmvarianttest)
+{
     std::vector<std::variant<int,long,double,std::string>> vec = { 10, 15l, 1.5, "hello" };
     for (auto& v : vec) {
         std::visit(overloaded{

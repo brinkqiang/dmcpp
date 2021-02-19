@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <map>
 #include "dmlog.h"
+#include "gtest.h"
 
 class HttpRouter {
 public:
@@ -45,7 +46,7 @@ private:
     HttpRouter m_oRouter;
 };
 
-int main() 
+TEST(dmfunctiontest, dmfunctiontest)
 {
     HttpServer server;
 
@@ -67,6 +68,4 @@ int main()
     server.call("OnConnect")("OnConnect", "OnConnect");
     server.call("OnDisConnect")("OnDisConnect", "OnDisConnect");
     server.call("OnMsg")("OnMsg", "OnMsg");
-
-    return 0;
 }

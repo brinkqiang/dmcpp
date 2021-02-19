@@ -5,12 +5,12 @@
 #include <iostream>
 #include "dmformat.h"
 #include "dmstrtk.hpp"
-
+#include "gtest.h"
 typedef std::vector<int> VecData;
 
-int main ()
+TEST(dmpermutationtest, dmpermutationtest)
 {
-    VecData vec{1, 2,3};
+    VecData vec{1, 2, 3, 4};
 
     do
     {
@@ -19,5 +19,4 @@ int main ()
     while (std::next_permutation(vec.begin(), vec.end()));
 
     fmt::print("{}\n", strtk::join(",", vec));
-    return 0;
 }

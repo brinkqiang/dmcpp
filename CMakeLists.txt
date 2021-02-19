@@ -8,5 +8,6 @@ INCLUDE(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
 ModuleImport("dmlog" "thirdparty/dmlog")
+ModuleImport("dmtest" "thirdparty/dmtest")
 LibImport("dmcpp" "src")
-ExeImport("test" "dmcpp")
+ExeImport("test" "dmcpp;dmtest")
