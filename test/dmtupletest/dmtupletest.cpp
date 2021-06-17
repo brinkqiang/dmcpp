@@ -25,6 +25,6 @@ TEST(dmtupletest, dmtupletest)
         int a = 0;
     };
 
-    std::cout << std::is_pod<A>::value << std::endl;
-    std::cout << std::is_pod<B>::value << std::endl;
+    std::cout << "struct A " << std::is_pod<A>::value << std::endl;
+    std::cout << "struct B " << std::is_pod<B>::value << std::endl;
 }
