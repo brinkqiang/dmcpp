@@ -30,6 +30,19 @@ namespace dmcast
 template <typename To, typename From>
 struct Converter
 {
+    static To convert(const From& from)
+    {
+        return To();
+    }
+};
+
+template <typename From>
+struct Converter<char, From>
+{
+    static char convert(const From& from)
+    {
+        return std::stoi(from);
+    }
 };
 
 template <typename From>
@@ -109,7 +122,7 @@ struct Converter<float, From>
 {
     static float convert(const From& from)
     {
-        return (float)std::atof(from);
+        return std::stof(from);
     }
 };
 
@@ -118,7 +131,16 @@ struct Converter<double, From>
 {
     static double convert(const From& from)
     {
-        return std::atof(from);
+        return std::stod(from);
+    }
+};
+
+template <typename From>
+struct Converter<long double, From>
+{
+    static long double convert(const From& from)
+    {
+        return std::stold(from);
     }
 };
 
@@ -177,7 +199,6 @@ struct Converter<bool, char[N]>
     }
 };
 
-//to string
 template <typename From>
 struct Converter<std::string, From>
 {
@@ -205,11 +226,20 @@ struct Converter<std::string, const char*>
     }
 };
 
+template <unsigned N>
+struct Converter<std::string, char[N]>
+{
+    static std::string convert(const char(&from)[N])
+    {
+        return from;
+    }
+};
+
 template <typename To, typename From>
 typename std::enable_if<!std::is_same<To, From>::value,
          To>::type lexical_cast(const From& from)
 {
-    return Converter<To, From>::convert(from);
+    return dmcast::Converter<To, From>::convert(from);
 }
 
 template <typename To, typename From>
@@ -219,6 +249,8 @@ typename std::enable_if<std::is_same<To, From>::value, To>::type lexical_cast(
     return from;
 }
 
+#include <tuple>
+
 template <typename ... T>
 std::string lexical_cast(std::tuple<T...>& t)
 {
@@ -226,8 +258,22 @@ std::string lexical_cast(std::tuple<T...>& t)
     std::apply([&](auto&& ... args)
     {
         ((strData += (strData.empty() ? "" : ","),
-          strData += dmcast::lexical_cast<std::string>(args)), ...);
+          strData += lexical_cast<std::string>(args)), ...);
     }, t);
+    return strData;
+}
+
+template <typename T>
+std::string lexical_cast(T& t)
+{
+    std::string strData;
+
+    for (auto it = std::begin(t); it != std::end(t); ++it)
+    {
+        strData += (strData.empty() ? "" : ",");
+        strData += std::to_string(*it);
+    }
+
     return strData;
 }
 

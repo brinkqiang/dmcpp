@@ -36,24 +36,12 @@ void DMAPI Cdmcpp_module::Release(void)
     delete this;
 }
 
-struct A
-{
-    int a ;
-};
-
-struct B
-{
-    int a = 0;
-};
-
 void DMAPI Cdmcpp_module::Test(void)
 {
     std::cout << "PROJECT_NAME = dmcpp" << std::endl;
     std::cout << "PROJECT_NAME_UP = DMCPP" << std::endl;
     std::cout << "PROJECT_NAME_LO = dmcpp" << std::endl;
 
-    std::cout << std::is_pod<A>::value << std::endl;
-    std::cout << std::is_pod<B>::value << std::endl;
 }
 
 Idmcpp* DMAPI dmcppGetModule()
