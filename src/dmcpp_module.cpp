@@ -41,6 +41,7 @@ void DMAPI Cdmcpp_module::Test(void)
     std::cout << "PROJECT_NAME = dmcpp" << std::endl;
     std::cout << "PROJECT_NAME_UP = DMCPP" << std::endl;
     std::cout << "PROJECT_NAME_LO = dmcpp" << std::endl;
+
 }
 
 Idmcpp* DMAPI dmcppGetModule()

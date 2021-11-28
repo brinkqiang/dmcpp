@@ -6,6 +6,7 @@
 #include <chrono>
 #include <unordered_map>
 #include "gtest.h"
+#include "dmcast.h"
 
 TEST(dmmaptest, dmmaptest)
 {
