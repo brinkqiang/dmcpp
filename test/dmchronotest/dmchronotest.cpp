@@ -16,3 +16,14 @@ TEST(dmchronotest, dmchronotest)
         ASSERT_TRUE(mapChrono[nano] == 1);
     }
 }
+
+TEST(dmchronotest2, dmchronotest2)
+{
+    double total = 0;
+
+    for (int i=1; i <= 6; i++)
+    {
+        total += ((i*2-1) / exp2(i-1));
+    }
+    std::cout << total << std::endl;
+}

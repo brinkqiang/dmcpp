@@ -71,7 +71,7 @@ public:
                         gCount += j;
                         gLock.unlock();
                     }
- 
+
                 }));
             }
 
@@ -112,6 +112,7 @@ private:
 
 TEST(dmthreadtest, dmthreadtest)
 {
+
     CMain::Instance()->Start(CMain::Instance());
     CMain::Instance()->WaitFor();
 }
