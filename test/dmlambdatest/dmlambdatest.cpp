@@ -4,6 +4,7 @@
 #include <tuple>
 #include <type_traits>
 #include "dmformat.h"
+#include "dmnameof.h"
 
 namespace stx
 {
@@ -52,7 +53,12 @@ namespace stx
     {};
 
 };
-
+class lam
+{
+public:
+    std::string name;
+    int age;
+};
 int main(void){
 
     fmt::print("[is mutable lambda]\n");
@@ -65,11 +71,13 @@ int main(void){
 
         fmt::print("is mutable : {}\n", std::is_same<stx::lambda_type<decltype(test)>::is_mutable, std::true_type>::value);
     }
+    int b = 0;
 
     fmt::print("[is normal lambda]\n");
     {
-        auto test = [](int a, int b)->long{return static_cast<long>(a); };
+        auto test = [b](int a, int b)->long{return static_cast<long>(a); };
 
+        fmt::print("NAMEOF_FULL: {} {}\n", NAMEOF_FULL(&test), NAMEOF_FULL_TYPE_EXPR(test));
         fmt::print("ret type : {}\n", std::is_same<stx::lambda_type<decltype(test)>::return_type, long>::value);
         fmt::print("arg size : {}\n", stx::lambda_type<decltype(test)>::arity);
 
@@ -77,5 +85,10 @@ int main(void){
         fmt::print("arg {} type : {}\n", 1, std::is_same<stx::lambda_type<decltype(test)>::arg<1>::type, int>::value);
 
         fmt::print("is mutable : {}\n", std::is_same<stx::lambda_type<decltype(test)>::is_mutable, std::true_type>::value);
+    }
+
+    fmt::print("[is class]\n");
+    {
+        fmt::print("{}\n{}\n{}\n", NAMEOF_TYPE_EXPR(std::declval<lam>()), NAMEOF_FULL_TYPE_EXPR(lam::name), NAMEOF_FULL_TYPE_EXPR(lam::age));
     }
 }
